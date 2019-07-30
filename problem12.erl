@@ -1,0 +1,34 @@
+-module(problem12).
+-compile(export_all).
+
+%%Finds the first triangle number with F factors
+%%The 5th triangle number is 15 (1+2+3+4+5)
+get_triangle_num_with_F_factors(F) ->
+	get_triangle_num_with_F_factors(F, 1).
+
+get_triangle_num_with_F_factors(1, _) -> 1;
+get_triangle_num_with_F_factors(F, N) ->
+	T = round(get_Nth_triangle_num(N)),
+	%%Had to round b/c get_Nth_triangle_num returns a float
+	%%which caused an arithmetic error in get_positive_factors
+	case has_F_factors(F, T) of
+	    true -> T;
+	    false -> get_triangle_num_with_F_factors(F, N+1)
+	end.
+
+get_Nth_triangle_num(N) -> (N+1)*(N/2).
+
+has_F_factors(F, N) ->
+	Num_Of_Factors = length(get_positive_factors(N)),
+	F == Num_Of_Factors.
+
+get_positive_factors(N) -> get_positive_factors(N, 1, []).
+
+get_positive_factors(N, _, _) when N =< 0 -> [0];
+get_positive_factors(N, N, Acc) -> [N|Acc];
+get_positive_factors(N, M, Acc) ->
+	Rem = N rem M,
+	if
+		Rem == 0 -> get_positive_factors(N, M+1, [M|Acc]);
+		Rem >= 0 -> get_positive_factors(N, M+1, Acc)
+	end.
