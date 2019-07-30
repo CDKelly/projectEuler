@@ -1,0 +1,19 @@
+-module(problem16).
+-compile(export_all).
+
+%%Returns the sum of the digits from 2 to the Nth power
+%%2^15 = 32768; 3 + 2 + 7 + 6 + 8 = 26
+get_power_digit_sum(N) ->
+    two_to_the_N = math:pow(2, N),
+    list_of_digits = make_int_list(two_to_the_N),
+    lists:sum(list_of_digits).
+
+
+make_int_list(0) -> [0];
+make_int_list(N) when N > 0 -> make_int_list(N, []).
+
+make_int_list(0, Acc) -> Acc;
+make_int_list(N, Acc) ->
+    Digit = N rem 10,
+    Number = N div 10,
+    make_int_list(Number, [Digit|Acc]).
